@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des agences{% endblock %}
+
+{% block body %}
+<main class="flex-grow p-6 mt-5">
+    <div class="bg-white p-6 rounded-lg shadow mb-6">
+        <h4 class="text-lg font-semibold text-gray-700 mb-4">Filtres</h4>
+        <form method="get" action="{{ path('agence_index') }}" class="mb-4 flex space-x-4">
+            <input type="text" name="adresse" value="{{ adresseFilter }}" 
+                   placeholder="Filtrer par adresse" 
+                   class="border rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-blue-500" />
+
+            <input type="text" name="telephone" value="{{ telephoneFilter }}" 
+                   placeholder="Filtrer par téléphone" 
+                   class="border rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-blue-500" />
+
+            <button type="submit" 
+                    class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                Filtrer
+            </button>
+        </form>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow mb-6">
+        <h4 class="text-lg font-semibold text-gray-700 mb-4">Liste des agences</h4>
+        <table class="table-auto w-full border-collapse border border-gray-300">
+            <thead>
+                <tr class="bg-[#06045A] text-white">
+                    <th class="border border-gray-300 px-4 py-2">Numéro</th>
+                    <th class="border border-gray-300 px-4 py-2">Adresse</th>
+                    <th class="border border-gray-300 px-4 py-2">Téléphone</th>
+                    <th class="border border-gray-300 px-4 py-2">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for agence in agences %}
+                    <tr class="bg-white hover:bg-gray-100">
+                        <td class="border border-gray-300 px-4 py-2">{{ agence.numero }}</td>
+                        <td class="border border-gray-300 px-4 py-2">{{ agence.adresse }}</td>
+                        <td class="border border-gray-300 px-4 py-2">{{ agence.telephone }}</td>
+                      <td class="border border-gray-300 px-4 py-2">
+                     <a href="{{ path('agence_index') }}" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Voir</a>
+
+                    <form action="{{ path('agence_supprimer', {id: agence.id}) }}" method="post" class="inline">
+                   <input type="hidden" name="_method" value="DELETE">
+                  <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                  Supprimer
+        </button>
+    </form>
+</td>
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+               {# display navigation #}
+<div class="navigation rounded-lg">
+    {{ knp_pagination_render(agences) }}
+</div>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow">
+        <h4 class="text-lg font-semibold text-gray-700 mb-4">Ajouter une agence</h4>
+        {{ form_start(form) }}
+            {{ form_widget(form) }}
+        {{ form_end(form) }}
+    </div>
+</main>
+{% endblock %}
